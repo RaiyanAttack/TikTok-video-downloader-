@@ -88,13 +88,7 @@ footer{text-align:center;color:#666675;font-size:11px;padding:20px}
 
   <p class="note" id="about" style="margin-top:35px">Important: this frontend accepts TikTok short links. For actual downloads, connect an authorized backend/API by setting window.TIKSAVE_API_URL.</p>
 </main>
-<div style="text-align:center;padding:0 20px 12px;position:relative;z-index:2">
-  <a href="https://www.tiktok.com/@good0boy31" target="_blank" rel="noopener"
-     style="display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:999px;background:#11111a;border:1px solid #292938;color:#fff;text-decoration:none;font-weight:800;font-size:13px">
-    TikTok • @good0boy31
-  </a>
-</div>
-<footer>© 2026 TikSave+ • Made By Ry3dits • Use only with content you are authorized to download.</footer>
+<div style="text-align:center;padding:0 20px 12px;position:relative;z-index:2"><a href="https://www.tiktok.com/@good0boy31" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:999px;background:#11111a;border:1px solid #292938;color:#fff;text-decoration:none;font-weight:800;font-size:13px">TikTok • @good0boy31</a></div><footer>© 2026 TikSave+ • Made By Ry3dits • Use only with content you are authorized to download.</footer>
 
 <script>
 // Example: set window.TIKSAVE_API_URL to your own authorized backend endpoint before this script runs.
@@ -111,7 +105,7 @@ btn.addEventListener('click', async ()=>{
 
   // Accept the requested short-link form:
   // https://vt.tiktok.com/....../
-  const shortLink=/^https?:\\/\\/(?:www\\.)?(?:tiktok\\.com|vt\\.tiktok\\.com|vm\\.tiktok\\.com)\\//i;
+  const shortLink=/^https?:\\/\\/vt\\.tiktok\\.com\\/[A-Za-z0-9_-]+\\/?$/i;
   if(!shortLink.test(value)){
     result.classList.add('show');
     status.textContent='Invalid short link';
@@ -145,7 +139,7 @@ btn.addEventListener('click', async ()=>{
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({url:value,format:'MP4'})
     });
-    if(!response.ok){ const errData=await response.json().catch(()=>({})); throw new Error(errData.error || ('API request failed ('+response.status+')')); }
+    if(!response.ok) throw new Error('API request failed');
     const data=await response.json();
     if(!data.download_url) throw new Error('No download URL returned');
 
@@ -164,7 +158,7 @@ btn.addEventListener('click', async ()=>{
   }catch(err){
     status.textContent='Download service unavailable';
     bar.style.width='0%';
-    note.textContent=err.message || 'Check your backend/API connection and try again.';
+    note.textContent='Check your backend/API connection and try again.';
   }
 });
 url.addEventListener('keydown',e=>{if(e.key==='Enter')btn.click()});
